@@ -1,5 +1,5 @@
 """
-Fisier principal. Initializeaza baza de date, liniile de garda, algoritmul, creeaza interfata grafica.
+Fisier principal. Initializeaza baza de date, algoritmul, creeaza interfata grafica.
 """
 
 import tkinter as tk
@@ -9,7 +9,7 @@ from algoritm import Algoritm
 from clase import LinieGarda
 from interfata.fereastra_principala import FereastraPrincipala
 
-def populeaza_linii(db):
+def populeaza_linii(db) -> None:
     """Adauga liniile de garda standard daca nu exista deja."""
     if len(db.listare_linii_garda()) == 0:
         db.adauga_linie_garda(LinieGarda(nume="Linia 1 - Sef de garda"))
