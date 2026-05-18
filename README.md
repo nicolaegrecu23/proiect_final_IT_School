@@ -47,28 +47,9 @@ proiect_final/
 
 ## Instalare si rulare
 
-1. Se cloneaza repository-ul:
-
-```bash
-git clone https://github.com/nicolaegrecu23/<nume-repo>.git
-cd <nume-repo>
-```
-
-2. (Optional) Se poate popula baza de date cu date de test:
-
-```bash
-python populeaza_db.py
-```
-
-Aceasta comanda adauga in DB 3 linii de garda si 12 medici de test (2 primari, 4 specialisti, 6 rezidenti).
-
-3. Se ruleaza aplicatia:
-
-```bash
-python main.py
-```
-
-Aplicatia se deschide cu interfata grafica.
+1. Se cloneaza repository-ul https://github.com/nicolaegrecu23/proiect_final_IT_School.git
+2. Optional, se poate popula baza de date cu date de test disponibile in populeaza_db.py. Aceasta comanda adauga in DB 3 linii de garda si 12 medici de test (2 primari, 4 specialisti, 6 rezidenti).
+3. Se ruleaza aplicatia prin main.py. Aplicatia se deschide cu interfata grafica.
 
 ## Utilizare
 
@@ -101,28 +82,26 @@ Aplicatia se deschide cu interfata grafica.
 
 ## Tehnologii si concepte folosite
 
-- **OOP**: clase de baza si subclase (Medic → Primar/Specialist/Rezident), polimorfism (`verifica_eligibilitate`, `@property grad`), encapsulare
-- **Factory pattern**: functia `construieste_medic` pentru creare obiecte din string-ul `grad`
-- **SQLite**: baza de date relationala cu 4 tabele, foreign keys, constrangeri (NOT NULL, UNIQUE)
-- **tkinter**: interfata grafica cu Notebook, Frame, Treeview, Combobox, Entry, Button, messagebox
-- **Logging**: inregistrare evenimente in fisier
-- **Type hints**: adnotari de tip pentru claritate
-- **Separation of concerns**: fiecare fisier are responsabilitate clara (date, DB, algoritm, GUI)
-- **CSV**: import/export prin modulul standard `csv`
+- OOP: clase de baza si subclase (Medic → Primar/Specialist/Rezident), polimorfism (`verifica_eligibilitate`, `@property grad`), encapsulare
+- SQLite: baza de date relationala cu 4 tabele, foreign keys, constrangeri (NOT NULL, UNIQUE)
+- tkinter: interfata grafica cu Notebook, Frame, Treeview, Combobox, Entry, Button, messagebox
+- Logging: inregistrare evenimente in fisier
+- Type hints: adnotari de tip pentru claritate
+- Separation of concerns: fiecare fisier are responsabilitate clara (date, DB, algoritm, GUI)
+- CSV: import/export prin modulul standard `csv`
 
 ## Algoritmul de generare
 
 Pentru fiecare zi din luna si pentru fiecare linie de garda:
-
-1. **Filtrare**: medici eligibili pe linie (dupa grad)
-2. **Disponibilitate**: filtrare dupa indisponibilitati
-3. **Constrangeri hard**: limita garzi pe luna + pauza minima intre garzi
-4. **Scoring**: fiecare candidat primeste un scor pe baza de:
+1. Filtrare: medici eligibili pe linie (dupa grad)
+2. Disponibilitate: filtrare dupa indisponibilitati
+3. Constrangeri "hard": limita garzi pe luna + pauza minima intre garzi
+4. Atribuire scor: fiecare candidat primeste un scor pe baza de:
    - Preferinte pozitive (bonus mare daca medicul a cerut acea zi)
    - Echitate generala (cati garzi mai poate face)
    - Echitate weekend (doar in weekend)
-   - Random tie-break (pentru cazuri de scoruri egale)
-5. **Atribuire**: medicul cu scorul cel mai mare primeste garda
+   - Departajare in caz de egalitate (pentru cazuri de scoruri egale)
+5. Atribuire: medicul cu scorul cel mai mare primeste garda.
 
 Daca nu exista niciun candidat pentru o zi-linie, algoritmul ridica `EroareAtribuireGarda`.
 
