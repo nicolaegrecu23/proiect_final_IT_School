@@ -48,8 +48,8 @@ proiect_final/
 ## Instalare si rulare
 
 1. Se cloneaza repository-ul https://github.com/nicolaegrecu23/proiect_final_IT_School.git
-2. Optional, se poate popula baza de date cu date de test disponibile in populeaza_db.py. Aceasta comanda adauga in DB 3 linii de garda si 12 medici de test (2 primari, 4 specialisti, 6 rezidenti).
-3. Se ruleaza aplicatia prin main.py. Aplicatia se deschide cu interfata grafica.
+2. Se ruleaza aplicatia prin main.py pentru a genera baza de date si liniile de garda; este de asemenea pornita interfata grafica.
+3. Se poate popula baza de date cu date de test disponibile in populeaza_db.py. Aceasta comanda adauga in DB 12 medici de test (2 primari, 4 specialisti, 6 rezidenti). Alternativ, se pot introduce manual datele.
 
 ## Utilizare
 
