@@ -65,7 +65,7 @@ class Rezident(Medic):
         - an 4 sau 5: Linia 2 (urgente) sau Linia 3 (sectie)
     """
     
-    def __init__(self, nume: str, prenume: str, an: int, id: int | None = None, telefon: int | None = None):
+    def __init__(self, nume: str, prenume: str, an: int, id: int | None = None, telefon: str | None = None):
         super().__init__(nume=nume, prenume=prenume, id=id, telefon=telefon)
         if an not in (3, 4, 5):
             raise ValueError("An de rezidentiat invalid sau neeligibil pentru garda.")
