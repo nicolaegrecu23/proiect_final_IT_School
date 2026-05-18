@@ -7,19 +7,21 @@ Programul si statisticile se exporta direct in CSV in folderul proiectului.
 import csv
 import os
 from datetime import date
- 
+
 import tkinter as tk
 from tkinter import ttk
 import tkinter.messagebox
- 
+
 from clase import EroareAtribuireGarda
-  
+
+
 LUNI_NUME = {1: "Ianuarie", 2: "Februarie", 3: "Martie", 4: "Aprilie",
     5: "Mai", 6: "Iunie", 7: "Iulie", 8: "August",
     9: "Septembrie", 10: "Octombrie", 11: "Noiembrie", 12: "Decembrie"}
- 
+
 FOLDER = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
- 
+
+
 class TabProgram:
     """Tab pentru generarea si exportarea programului de garzi."""
 
@@ -45,15 +47,10 @@ class TabProgram:
         self._an_entry.insert(0, str(astazi.year))
         self._an_entry.grid(row=0, column=3, padx=5, pady=10)
         
-        tk.Button(self._parent, text="Genereaza si exporta program", command=self._genereaza_si_exporta_program, width=30).grid(row=1, column=0, columnspan=2, padx=5, pady=10)
-        
-        tk.Button(self._parent, text="Genereaza si exporta statistici", command=self._genereaza_si_exporta_statistici, width=30).grid(row=1, column=2, columnspan=2, padx=5, pady=10)
-        
+        tk.Button(self._parent, text="Genereaza si exporta program + statistici", command=self._genereaza_si_exporta, width=40).grid(row=1, column=0, columnspan=4, padx=5, pady=10)
+    
     def _get_an_luna(self):
-        """
-        Citeste si valideaza luna si anul.
-        Returneaza (an, luna) sau (None, None) cu warning.
-        """
+        """Citeste si valideaza luna si anul. Returneaza (an, luna) sau (None, None) cu avertizare."""
         luna_nume = self._luna_combo.get()
         if not luna_nume:
             tkinter.messagebox.showwarning("Atentie", "Selecteaza o luna.")
@@ -73,10 +70,7 @@ class TabProgram:
         return int(an_str), luna
     
     def _numara_garzi_pe_medic(self, garzi, doar_weekend=False):
-        """
-        Numara cate garzi are fiecare medic.
-        Returneaza dict: {medic_id: nr_garzi}
-        """
+        """Numara cate garzi are fiecare medic. Returneaza dict: {medic_id: nr_garzi}"""
         contoare = {}
         for g in garzi:
             if doar_weekend and not g.este_weekend():
@@ -87,85 +81,89 @@ class TabProgram:
                 contoare[g.medic_id] = 1
         return contoare
     
-    def _genereaza_si_exporta_program(self):
-        """Genereaza programul lunii si il exporta direct in CSV."""
-        an, luna = self._get_an_luna()
-        if an is None:
-            return
-        try:
-            garzi = self._algoritm.genereaza_program(an, luna)
+    def _scrie_program_csv(self, garzi, an, luna):
+        """Scrie programul in CSV (format pivot: data x linii)."""
+        linii = self._db.listare_linii_garda()
+        medici_dict = {}
+        for m in self._db.listare_medici():
+            medici_dict[m.id] = m
+        
+        garzi_pe_data = {}
+        for g in garzi:
+            if g.data not in garzi_pe_data:
+                garzi_pe_data[g.data] = {}
+            garzi_pe_data[g.data][g.linie_id] = g.medic_id
+        
+        nume_fisier = f"program_garzi_{an}_{luna:02d}.csv"
+        cale = os.path.join(FOLDER, nume_fisier)
+        
+        with open(cale, "w", encoding="utf-8", newline="") as fisier:
+            writer = csv.writer(fisier)
+            header = ["Data", "Weekend"]
+            for linie in linii:
+                header.append(linie.nume)
+            writer.writerow(header)
             
-            linii = self._db.listare_linii_garda()
-            medici_dict = {}
-            for m in self._db.listare_medici():
-                medici_dict[m.id] = m
-            
-            garzi_pe_data = {}
-            for g in garzi:
-                if g.data not in garzi_pe_data:
-                    garzi_pe_data[g.data] = {}
-                garzi_pe_data[g.data][g.linie_id] = g.medic_id
-            
-            nume_fisier = f"program_garzi_{an}_{luna:02d}.csv"
-            cale = os.path.join(FOLDER, nume_fisier)
-            with open(cale, "w", encoding="utf-8", newline="") as fisier:
-                writer = csv.writer(fisier)
-                header = ["Data", "Weekend"]
+            for data in sorted(garzi_pe_data.keys()):
+                if data.weekday() >= 5:
+                    weekend = "DA"
+                else:
+                    weekend = "NU"
+                rand = [data.isoformat(), weekend]
                 for linie in linii:
-                    header.append(linie.nume)
-                writer.writerow(header)
-                for data in sorted(garzi_pe_data.keys()):
-                    if data.weekday() >= 5:
-                        weekend = "DA"
-                    else:
-                        weekend = "NU"
-                    rand = [data.isoformat(), weekend]
-                    for linie in linii:
-                        medic_id = garzi_pe_data[data].get(linie.id)
-                        if medic_id is not None:
-                            medic = medici_dict.get(medic_id)
-                            if medic:
-                                rand.append(f"{medic.nume} {medic.prenume}")
-                            else:
-                                rand.append("")
+                    medic_id = garzi_pe_data[data].get(linie.id)
+                    if medic_id is not None:
+                        medic = medici_dict.get(medic_id)
+                        if medic:
+                            rand.append(f"{medic.nume} {medic.prenume}")
                         else:
                             rand.append("")
-                    writer.writerow(rand)
-            
-            tkinter.messagebox.showinfo("Succes!", f"Program generat cu succes pentru {LUNI_NUME[luna]} {an}.\n\n")
-                    
-        except EroareAtribuireGarda as e:
-            tkinter.messagebox.showerror("Conflict atribuire", str(e))
-        except Exception as e:
-            tkinter.messagebox.showerror("Eroare", str(e))
+                    else:
+                        rand.append("")
+                writer.writerow(rand)
+        
+        return cale
     
-    def _genereaza_si_exporta_statistici(self):
-        """Genereaza programul si exporta statisticile de echitate in CSV."""
+    def _scrie_statistici_csv(self, garzi, an, luna):
+        """Scrie statisticile de echitate in CSV."""
+        contoare = self._numara_garzi_pe_medic(garzi)
+        contoare_wknd = self._numara_garzi_pe_medic(garzi, doar_weekend=True)
+        
+        medici_dict = {}
+        for m in self._db.listare_medici():
+            medici_dict[m.id] = m
+        
+        nume_fisier = f"statistici_garzi_{an}_{luna:02d}.csv"
+        cale = os.path.join(FOLDER, nume_fisier)
+        
+        with open(cale, "w", encoding="utf-8", newline="") as fisier:
+            writer = csv.writer(fisier)
+            writer.writerow(["Medic", "Grad", "Total garzi", "Garzi weekend"])
+            for medic_id in sorted(contoare.keys()):
+                nr = contoare[medic_id]
+                medic = medici_dict.get(medic_id)
+                if medic:
+                    writer.writerow([
+                        f"{medic.nume} {medic.prenume}",
+                        medic.grad,
+                        nr,
+                        contoare_wknd.get(medic_id, 0)
+                    ])
+        
+        return cale
+    
+    def _genereaza_si_exporta(self):
+        """Genereaza programul si exporta ambele CSV-uri (program + statistici)."""
         an, luna = self._get_an_luna()
         if an is None:
             return
         try:
             garzi = self._algoritm.genereaza_program(an, luna)
             
-            contoare = self._numara_garzi_pe_medic(garzi)
-            contoare_wknd = self._numara_garzi_pe_medic(garzi, doar_weekend=True)
+            cale_program = self._scrie_program_csv(garzi, an, luna)
+            cale_statistici = self._scrie_statistici_csv(garzi, an, luna)
             
-            medici_dict = {}
-            for m in self._db.listare_medici():
-                medici_dict[m.id] = m
-            
-            nume_fisier = f"statistici_garzi_{an}_{luna:02d}.csv"
-            cale = os.path.join(FOLDER, nume_fisier)
-            with open(cale, "w", encoding="utf-8", newline="") as fisier:
-                writer = csv.writer(fisier)
-                writer.writerow(["Medic", "Grad", "Total garzi", "Garzi weekend"])
-                for medic_id in sorted(contoare.keys()):
-                    nr = contoare[medic_id]
-                    medic = medici_dict.get(medic_id)
-                    if medic:
-                        writer.writerow([f"{medic.nume} {medic.prenume}", medic.grad, nr, contoare_wknd.get(medic_id, 0)])
-            
-            tkinter.messagebox.showinfo("Succes!", f"Statistica generata cu succes pentru {LUNI_NUME[luna]} {an}.\n\n")
+            tkinter.messagebox.showinfo("Succes!", f"Program si statistici generate pentru {LUNI_NUME[luna]} {an}.\n\n")
         
         except EroareAtribuireGarda as e:
             tkinter.messagebox.showerror("Conflict atribuire", str(e))
