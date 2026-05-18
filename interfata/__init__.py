@@ -1,1 +1,1 @@
-
+"""Pachet pentru interfata grafica."""

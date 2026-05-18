@@ -1,3 +1,9 @@
+"""
+Tab pentru generarea si exportarea programului de garzi.
+
+Programul si statisticile se exporta direct in CSV in folderul proiectului.
+"""
+
 import csv
 import os
 from datetime import date
@@ -18,6 +24,7 @@ class TabProgram:
     """Tab pentru generarea si exportarea programului de garzi."""
 
     def __init__(self, parent, db, algoritm):
+        """Initializeaza tab-ul cu parent (Frame), DB si algoritm."""
         self._parent = parent
         self._db = db
         self._algoritm = algoritm
@@ -25,6 +32,7 @@ class TabProgram:
         self._build_interface()
     
     def _build_interface(self):
+        """Construieste toate widget-urile tab-ului."""
         tk.Label(self._parent, text="Luna").grid(row=0, column=0, padx=5, pady=10)
         self._luna_combo = ttk.Combobox(self._parent, values=tuple(LUNI_NUME.values()), width=15)
         self._luna_combo.grid(row=0, column=1, padx=5, pady=10)

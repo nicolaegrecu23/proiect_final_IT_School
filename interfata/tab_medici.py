@@ -16,6 +16,7 @@ class TabMedici:
     """Tab pentru gestionarea medicilor (CRUD + filtrare + import/export CSV)."""
     
     def __init__(self, parent, db):
+        """Initializare tab cu parent (Frame) si DB."""
         self._parent = parent
         self._db = db
         

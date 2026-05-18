@@ -14,7 +14,7 @@ from interfata.tab_program import TabProgram
 class FereastraPrincipala:
     """Fereastra principala cu Notebook si tab-uri."""
     
-    def __init__(self, window, db, algoritm):
+    def __init__(self, window: tk.Tk, db, algoritm):
         self._window = window
         self._db = db
         self._algoritm = algoritm

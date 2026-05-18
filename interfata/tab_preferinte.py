@@ -14,6 +14,7 @@ class TabPreferinte:
     """Tab CRUD pentru preferintele pozitive."""
     
     def __init__(self, parent, db):
+        """Initializare tab cu parent (Frame) si DB."""
         self._parent = parent
         self._db = db
         self._mapare_medici = {}
@@ -23,6 +24,8 @@ class TabPreferinte:
         self._refresh_treeview()
     
     def _build_interface(self):
+        """Construieste toate widget-urile tab-ului."""
+
         tk.Label(self._parent, text="Medic").grid(row=0, column=0, padx=5, pady=5)
         self._medic_combo = ttk.Combobox(self._parent, width=40)
         self._medic_combo.grid(row=0, column=1, padx=5, pady=5)
@@ -70,6 +73,7 @@ class TabPreferinte:
         self._medic_combo["values"] = valori
     
     def _get_medic_id_selectat(self):
+        """Returneaza id-ul medicului selectat in combobox sau None."""
         text = self._medic_combo.get()
         if not text:
             return None
