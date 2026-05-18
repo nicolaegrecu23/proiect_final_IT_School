@@ -22,23 +22,23 @@ Aplicatie desktop pentru gestionarea garzilor intr-o sectie de spital - structur
 ## Structura proiectului
 
 proiect_final/
-├── main.py                          # punct de intrare
-├── clase.py                         # modelele de date (Medic, LinieGarda, etc.)
-├── baza_de_date.py                  # operatii SQLite (CRUD pe entitati)
-├── algoritm.py                      # algoritm de generare a programului
-├── logger_config.py                 # configurare logging
-├── populeaza_db.py                  # script pentru date de test
-├── README.md                        # fisier de descriere
-├── .gitignore                       # fisiere excluse din Git
-├── garzi.db                         # baza de date SQLite (auto-generata)
-├── garzi_app.log                    # log aplicatie (auto-generat)
-└── interfata/                       # pachet interfata grafica
-    ├── __init__.py
-    ├── fereastra_principala.py      # fereastra cu Notebook si tab-uri
-    ├── tab_medici.py                # tab CRUD medici + export CSV
-    ├── tab_indisponibilitati.py     # tab CRUD indisponibilitati
-    ├── tab_preferinte.py            # tab CRUD preferinte
-    └── tab_program.py               # tab generare + export program si statistici
+-> main.py                          # punct de intrare
+-> clase.py                         # modelele de date (Medic, LinieGarda, etc.)
+-> baza_de_date.py                  # operatii SQLite (CRUD pe entitati)
+-> algoritm.py                      # algoritm de generare a programului
+-> logger_config.py                 # configurare logging
+-> populeaza_db.py                  # script pentru date de test
+-> README.md                        # fisier de descriere
+-> .gitignore                       # fisiere excluse din Git
+-> garzi.db                         # baza de date SQLite (auto-generata)
+-> garzi_app.log                    # log aplicatie (auto-generat)
+-> interfata/                       # pachet interfata grafica
+-----> __init__.py
+-----> fereastra_principala.py      # fereastra cu Notebook si tab-uri
+-----> tab_medici.py                # tab CRUD medici + export CSV
+-----> tab_indisponibilitati.py     # tab CRUD indisponibilitati
+-----> tab_preferinte.py            # tab CRUD preferinte
+-----> tab_program.py               # tab generare + export program si statistici
 
 ## Cerinte
 
