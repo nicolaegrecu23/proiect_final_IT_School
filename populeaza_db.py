@@ -7,17 +7,9 @@ Adauga elemente doar daca baza de date este goala.
 from baza_de_date import DatabaseManager
 from clase import Primar, Specialist, Rezident, LinieGarda
 
-def populeaza():
+def populeaza_medici():
     """Populeaza DB-ul cu date de test daca e gol."""
     db = DatabaseManager()
-    
-    if len(db.listare_linii_garda()) == 0:
-        db.adauga_linie_garda(LinieGarda(nume="Linia 1 - Sef de garda"))
-        db.adauga_linie_garda(LinieGarda(nume="Linia 2 - Urgente"))
-        db.adauga_linie_garda(LinieGarda(nume="Linia 3 - Sectie"))
-        print("Linii de garda adaugate.")
-    else:
-        print(f"Liniile exista deja ({len(db.listare_linii_garda())} linii).")
     
     if len(db.listare_medici()) == 0:
         db.adauga_medic(Primar("popescu", "ion"))
@@ -44,4 +36,4 @@ def populeaza():
 
 
 if __name__ == "__main__":
-    populeaza()
+    populeaza_medici()
