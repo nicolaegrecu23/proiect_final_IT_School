@@ -1,7 +1,5 @@
 """
-Fisier utilitar pentru popularea bazei de date pentru test.
-
-Adauga elemente doar daca baza de date este goala.
+Fisier utilitar pentru popularea bazei de date pentru test. Adauga elemente doar daca baza de date este goala.
 """
 
 from baza_de_date import DatabaseManager
@@ -32,7 +30,6 @@ def populeaza_medici():
         print(f"Medicii exista deja ({len(db.listare_medici())} medici).")
     
     print(f"\nTotal medici: {len(db.listare_medici())}")
-    print(f"Total linii: {len(db.listare_linii_garda())}")
 
 
 if __name__ == "__main__":
