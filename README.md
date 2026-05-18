@@ -77,8 +77,7 @@ proiect_final/
 ### Tab "Program garzi"
 
 - Se selecteaza luna si anul
-- Butonul "Genereaza si exporta program" - ruleaza algoritmul de garzi, iar programul se salveaza in `program_garzi_<an>_<luna>.csv`
-- Butonul "Genereaza si exporta statistici" - salveaza statisticile de echitate in `statistici_garzi_<an>_<luna>.csv`
+- Butonul "Genereaza si exporta program + statistici" - ruleaza algoritmul de garzi; programul se salveaza in `program_garzi_<an>_<luna>.csv`, iar statisticile in `statistici_garzi_<an>_<luna>.csv`
 
 ## Tehnologii si concepte folosite
 
