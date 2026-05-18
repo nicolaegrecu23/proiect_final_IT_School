@@ -10,6 +10,12 @@ from clase import Garda, EroareAtribuireGarda
 import logging
 
 class Algoritm:
+    """
+    Algoritm de generare a programului de garzi.
+
+    Respecta constrangeri "hard" (eligibilitate, indisponibilitate, pauza minima intre garzi, limita lunara) si optimizeaza in
+     functie de constrangeri "soft" (preferinte, echitate).
+    """
     LIMITA_GARZI_PE_LUNA = 10
     LIMITA_WEEKENDURI_PE_LUNA = 3
     PAUZA_MINIMA_ZILE = 2
@@ -30,7 +36,8 @@ class Algoritm:
         Genereaza programul de garzi pentru luna specificata - atribuire in 2 etape:
         1) Filtrare in mai multe etape: pentru fiecare zi, pentru fiecare linie, sunt verificati medicii eligibili, apoi cei care
          sunt disponibili, apoi respectarea limitelor de numar de garzi si a pauzei dintre garzi.
-        2) 
+        2) Se calculeaza un scor pentru fiecare medic in functie de constantele de clasa, iar medicului cu scorul cel mai mare ii
+         este atribuita garda; suplimentar, se adauga o valoare aleatoare intre 0 si 0.5 pentru departajare in caz de egalitate.
         
         Args:
             an: anul (ex: 2025)
